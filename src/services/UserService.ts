@@ -6,6 +6,9 @@ import { User } from "@prisma/client";
 
 export class UserService 
 {
+  static async getAllUsers() {
+    return OMprisma.user.findMany(); 
+  }
   static async selectUserByLogin(login: string): Promise<User> {
     const user =  await OMprisma.user.findUnique({
         where: {login}
@@ -13,14 +16,14 @@ export class UserService
     if (!user) throw { status: HttpStatusCode.BAD_REQUEST, message: ErrorsMessagesFr.INCORRECT_CREDENTIALS };
     return user;
   }
-
     static async selectUserById(id: number): Promise<User> {
     const user =  await OMprisma.user.findUnique({
         where: {id}
     });
     if (!user) throw { status: HttpStatusCode.BAD_REQUEST, message: ErrorsMessagesFr.USER_NOT_FOUND };
     return user;
-  }
+  }    // { id: "permissions", label: "Permissions", icon: Shield },
+
     static async userExists(login: string): Promise<boolean> {
     const user = await OMprisma.user.findUnique({ where: { login } });
     return !!user;

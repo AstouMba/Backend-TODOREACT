@@ -5,15 +5,12 @@ import { HistoriqueModifTacheController } from "../controllers/HistoriqueModifTa
 
 const OMrouter = Router();
 
-// Routes lecture
 OMrouter.get("/", TaskController.getAll);
 OMrouter.get("/:id", TaskController.getOne);
 OMrouter.get("/:id/historique", HistoriqueModifTacheController.getAllModif);
 
-// Création – on reçoit seulement JSON avec l'URL de l'image
 OMrouter.post("/", AuthMiddleware.authenticateUser, TaskController.create);
 
-// Modification / suppression
 OMrouter.patch("/:id", AuthMiddleware.authorizeModification, TaskController.update);
 OMrouter.patch("/:id/markDone", AuthMiddleware.authorizeModification, TaskController.updateStatusDone);
 OMrouter.patch("/:id/markUndone", AuthMiddleware.authorizeModification, TaskController.updateStatusUndone);

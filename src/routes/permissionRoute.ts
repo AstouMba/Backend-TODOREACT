@@ -6,6 +6,6 @@ const OMrouter = Router();
 OMrouter.get("/", PermissionUserTacheController.getAllGlobal);
 OMrouter.get("/:id/permissions", AuthMiddleware.authenticateUser, PermissionUserTacheController.getAll);
 OMrouter.post("/:id",  PermissionUserTacheController.create);
-OMrouter.delete("/:userId/:tacheId/:permission",  PermissionUserTacheController.delete);
+OMrouter.delete("/:userId/:tacheId/:permission", PermissionUserTacheController.delete);
 
 export default OMrouter

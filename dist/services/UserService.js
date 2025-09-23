@@ -11,6 +11,11 @@ import OMprisma from "../config/prisma.js";
 import { ErrorsMessagesFr } from "../enum/ErrorsMessagesFr.js";
 import { HttpStatusCode } from "../enum/StatusCode.js";
 export class UserService {
+    static getAllUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return OMprisma.user.findMany();
+        });
+    }
     static selectUserByLogin(login) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield OMprisma.user.findUnique({
@@ -30,7 +35,7 @@ export class UserService {
                 throw { status: HttpStatusCode.BAD_REQUEST, message: ErrorsMessagesFr.USER_NOT_FOUND };
             return user;
         });
-    }
+    } // { id: "permissions", label: "Permissions", icon: Shield },
     static userExists(login) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield OMprisma.user.findUnique({ where: { login } });

@@ -1,3 +1,9 @@
-import { TagsInput } from "./PermissionModel.js";
+import type { TagsInput } from "./PermissionModel.js";
 
-export type HistoriqueInput = TagsInput & {permission: string}
+export interface HistoriqueTache {
+  id: number;
+  action: string;
+  user: TagsInput;
+  createdAt: string;
+  modifiedAt?: string;
+}

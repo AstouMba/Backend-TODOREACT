@@ -5,6 +5,8 @@ import TaskRoutes from "./routes/TaskRoutes.js";
 import { ErrorController } from "./middlewaares/ErrorController.js";
 import AuthRoutes from './routes/authRoutes.js';
 import PermissionRoutes from './routes/permissionRoute.js';
+import HistoriqueModifTacheRoute from './routes/HistoriqueModifTacheRoute.js';
+import UserRoutes from './routes/UserRoutes.js';
 import { AuthMiddleware } from "./middlewaares/AuthMiddleware.js";
 import { fileURLToPath } from "url";
 
@@ -33,7 +35,9 @@ OMapp.use(AuthMiddleware.authenticateUser);
 OMapp.use('/uploads', express.static(uploadPath));
 OMapp.use('/api/tasks', TaskRoutes);
 OMapp.use('/api/grantpermission', PermissionRoutes);
+OMapp.use('/api/historique', HistoriqueModifTacheRoute);
 
-OMapp.use(ErrorController.handle);
+OMapp.use('/api/users', UserRoutes)
+
 
 export default OMapp;

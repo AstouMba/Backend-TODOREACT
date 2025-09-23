@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 export declare const PermissionSchema: z.ZodObject<{
     userId: z.ZodNumber;
     permission: z.ZodString;
