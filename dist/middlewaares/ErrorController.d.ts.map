@@ -1,0 +1,1 @@
+{"version":3,"file":"ErrorController.d.ts","sourceRoot":"","sources":["../../src/middlewaares/ErrorController.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,QAAQ,EAAE,YAAY,EAAE,MAAM,SAAS,CAAC;AAK1D,qBAAa,eAAe;IAExB,MAAM,CAAC,MAAM,CAAC,GAAG,EAAE,GAAG,EAAE,GAAG,EAAE,OAAO,EAAE,GAAG,EAAE,QAAQ,EAAE,IAAI,EAAE,YAAY;CAM1E"}

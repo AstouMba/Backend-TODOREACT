@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Taches {
+  id                Int                    @id @default(autoincrement())
+ titre             String               
+  description       String
+  createAt          DateTime               @default(now())
+  etat              Etat                   @default(En_Cours)
+  image             String?
+  userId            Int
+  tacheModification HistoriqueModifTache[]
+  UserPermission    PermissionUserTache[]
+  user              User                   @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "Taches_userId_fkey")
+}
+
+model User {
+  id                Int                    @id @default(autoincrement())
+  nom               String
+  login             String                 @unique
+  password          String
+  tacheModification HistoriqueModifTache[]
+  TachesPermission  PermissionUserTache[]
+  Taches            Taches[]
+}
+
+model PermissionUserTache {
+  id         Int        @id @default(autoincrement())
+  permission Permission
+  userId     Int
+  tacheId    Int
+  tache      Taches     @relation(fields: [tacheId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
+
+  @@index([tacheId], map: "PermissionUserTache_tacheId_fkey")
+  @@index([userId], map: "PermissionUserTache_userId_fkey")
+}
+
+model HistoriqueModifTache {
+  id         Int        @id @default(autoincrement())
+  modifiedAt DateTime   @default(now())
+  action     Permission
+  userId     Int
+  tacheId    Int
+  taches     Taches     @relation(fields: [tacheId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
+
+  @@index([tacheId], map: "HistoriqueModifTache_tacheId_fkey")
+  @@index([userId], map: "HistoriqueModifTache_userId_fkey")
+}
+
+enum Etat {
+  Termine
+  En_Cours
+}
+
+enum Permission {
+  GET
+  PATCH
+  DELETE
+}

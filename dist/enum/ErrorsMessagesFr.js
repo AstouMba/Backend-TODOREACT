@@ -1,0 +1,16 @@
+export var ErrorsMessagesFr;
+(function (ErrorsMessagesFr) {
+    ErrorsMessagesFr["TACHE_INTROUVABLE"] = "T\u00C2CHE INTROUVABLE";
+    ErrorsMessagesFr["ERREUR_VALIDATION"] = "ERREUR DE VALIDATION";
+    ErrorsMessagesFr["ERREUR_DATABASE"] = "ERREUR BASE DE DONN\u00C9ES";
+    ErrorsMessagesFr["ERREUR_INTERNE"] = "ERREUR INTERNE DU SERVEUR";
+    ErrorsMessagesFr["FORBIDDEN_ACTION"] = "VOUS N'AVEZ PAS LE DROIT DE FAIRE CETTE ACTION SUR CETTE T\u00C2CHE";
+    ErrorsMessagesFr["USER_NOT_FOUND"] = "Utilisateur introuvable";
+    ErrorsMessagesFr["INCORRECT_CREDENTIALS"] = "LOGIN OU MOT DE PASSE INCORRECT";
+    ErrorsMessagesFr["INVALID_INPUT"] = "LOGIN ET MOT DE PASSE OBLIGATOIRE";
+    ErrorsMessagesFr["PERMISSION_NOTFOUND"] = "CET UTILISATEUR N'A PAS CETTE PERMISSION SUR CETTE T\u00C2CHE";
+    ErrorsMessagesFr["NOT_ON_Your_OWN_TASK"] = "POURQUOI VOUS VOUS DONNER LA PERMISSION POUR MODIFIER VOTRE PROPRE T\u00C2CHE? CON";
+    ErrorsMessagesFr["ALREADY_GIVEN"] = "CETTE PERMISSION A D\u00C9J\u00C0 \u00C9T\u00C9 DONN\u00C9E";
+    //JWT
+})(ErrorsMessagesFr || (ErrorsMessagesFr = {}));
+//# sourceMappingURL=ErrorsMessagesFr.js.map

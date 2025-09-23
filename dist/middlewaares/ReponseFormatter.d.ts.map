@@ -1,0 +1,1 @@
+{"version":3,"file":"ReponseFormatter.d.ts","sourceRoot":"","sources":["../../src/middlewaares/ReponseFormatter.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAGnC,qBAAa,gBAAgB;IAEzB,MAAM,CAAC,OAAO,CAAC,GAAG,EAAE,QAAQ,EAAE,IAAI,EAAE,GAAG,EAAE,OAAO,EAAE,MAAM,EAAE,MAAM,GAAE,MAA0B;CAO/F"}
