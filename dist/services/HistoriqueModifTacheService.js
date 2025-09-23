@@ -11,6 +11,17 @@ import OMprisma from "../config/prisma.js";
 import { HttpStatusCode } from "../enum/StatusCode.js";
 import { ErrorsMessagesFr } from "../enum/ErrorsMessagesFr.js";
 export class HistoriqueModifTacheService {
+    static findAll() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return OMprisma.historiqueModifTache.findMany({
+                include: {
+                    user: { select: { id: true, nom: true, login: true } },
+                    taches: { select: { id: true, titre: true, createAt: true } }
+                },
+                orderBy: { modifiedAt: "desc" }
+            });
+        });
+    }
     static create(data, req) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield OMprisma.historiqueModifTache.create({ data: {

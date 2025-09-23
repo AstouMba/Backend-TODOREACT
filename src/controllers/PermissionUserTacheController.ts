@@ -12,6 +12,15 @@ import { ErrorsMessagesFr } from '../enum/ErrorsMessagesFr.js';
 export class PermissionUserTacheController
 
 {
+    static async getAllGlobal(req: Request, res: Response, next: NextFunction) {
+  try {
+    const permissions = await PermissionUserTacheService.findAll(); 
+    return ReponseFormatter.success(res, permissions, SuccessCodes.PERMISSION_GRANTED);
+  } catch (err) {
+    next(err);
+  }
+}
+
     static async getAll(req: Request, res: Response, next: NextFunction) {
   try {
     const tacheId = Number(req.params.id);

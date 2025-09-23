@@ -3,7 +3,7 @@ import { PermissionUserTacheController } from "../controllers/PermissionUserTach
 import { AuthMiddleware } from "../middlewaares/AuthMiddleware.js";
 
 const OMrouter = Router();
-
+OMrouter.get("/", PermissionUserTacheController.getAllGlobal);
 OMrouter.get("/:id/permissions", AuthMiddleware.authenticateUser, PermissionUserTacheController.getAll);
 OMrouter.post("/:id",  PermissionUserTacheController.create);
 OMrouter.delete("/:userId/:tacheId/:permission",  PermissionUserTacheController.delete);

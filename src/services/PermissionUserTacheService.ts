@@ -6,6 +6,15 @@ import type { Permission, PermissionUserTache } from "@prisma/client";
 export class PermissionUserTacheService
 
 {
+  static async findAll() {
+  return OMprisma.permissionUserTache.findMany({
+    include: {
+      user: { select: { id: true, login: true, nom: true } },
+      tache: { select: { id: true, titre: true } }
+    }
+  });
+}
+
   static async findByTaskId(tacheId: number) {
   return OMprisma.permissionUserTache.findMany({
     where: { tacheId },

@@ -7,7 +7,18 @@ import { Request } from "express";
 import { Permission } from "@prisma/client";
 
 export class HistoriqueModifTacheService
+
 {
+    static async findAll() {
+  return OMprisma.historiqueModifTache.findMany({
+    include: {
+      user: { select: { id: true, nom: true, login: true } },
+      taches: { select: { id: true, titre: true, createAt: true } }
+    },
+    orderBy: { modifiedAt: "desc" }
+  });
+}
+
     static async create(data: Omit<HistoriqueModifTache, "id" | "modifiedAt" | "action">, req: Request): Promise<HistoriqueModifTache> {
         return await OMprisma.historiqueModifTache.create({data:{
             action: (req.method).toUpperCase() as Permission,

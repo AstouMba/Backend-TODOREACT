@@ -16,6 +16,17 @@ import { UserService } from '../services/UserService.js';
 import { HttpStatusCode } from '../enum/StatusCode.js';
 import { ErrorsMessagesFr } from '../enum/ErrorsMessagesFr.js';
 export class PermissionUserTacheController {
+    static getAllGlobal(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const permissions = yield PermissionUserTacheService.findAll();
+                return ReponseFormatter.success(res, permissions, SuccessCodes.PERMISSION_GRANTED);
+            }
+            catch (err) {
+                next(err);
+            }
+        });
+    }
     static getAll(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

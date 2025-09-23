@@ -11,6 +11,16 @@ import OMprisma from "../config/prisma.js";
 import { HttpStatusCode } from "../enum/StatusCode.js";
 import { ErrorsMessagesFr } from "../enum/ErrorsMessagesFr.js";
 export class PermissionUserTacheService {
+    static findAll() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return OMprisma.permissionUserTache.findMany({
+                include: {
+                    user: { select: { id: true, login: true, nom: true } },
+                    tache: { select: { id: true, titre: true } }
+                }
+            });
+        });
+    }
     static findByTaskId(tacheId) {
         return __awaiter(this, void 0, void 0, function* () {
             return OMprisma.permissionUserTache.findMany({
