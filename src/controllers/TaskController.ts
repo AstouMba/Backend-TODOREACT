@@ -14,7 +14,7 @@ export class TaskController
     static async getAll(req: Request, res: Response, next: NextFunction){
         try {
             const OMpage = Number(req.query.page) > 0 ? Number(req.query.page) : 1;
-            const OMlimit = Number(req.query.limit) > 0 ? Number(req.query.limit) : 10;
+            const OMlimit = Number(req.query.limit) > 0 ? Number(req.query.limit) : 3;
             const OMoffset = (OMpage - 1) * OMlimit;
 
             const OMsearch = (req.query.search as string) || "";
