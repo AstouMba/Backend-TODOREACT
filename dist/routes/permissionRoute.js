@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { PermissionUserTacheController } from "../controllers/PermissionUserTacheController.js";
 import { AuthMiddleware } from "../middlewaares/AuthMiddleware.js";
-const OMrouter = Router();
-OMrouter.get("/:id/permissions", AuthMiddleware.authenticateUser, PermissionUserTacheController.getAll);
-OMrouter.post("/:id", PermissionUserTacheController.create);
-OMrouter.delete("/:userId/:tacheId/:permission", PermissionUserTacheController.delete);
-export default OMrouter;
+const AMrouter = Router();
+AMrouter.get("/", PermissionUserTacheController.getAllGlobal);
+AMrouter.get("/:id/permissions", AuthMiddleware.authenticateUser, PermissionUserTacheController.getAll);
+AMrouter.post("/:id", PermissionUserTacheController.create);
+AMrouter.delete("/:userId/:tacheId/:permission", PermissionUserTacheController.delete);
+export default AMrouter;
 //# sourceMappingURL=permissionRoute.js.map

@@ -1,39 +1,46 @@
 import express, { Request, Response } from "express";
-import cors from 'cors';
-import path from 'path';
-import TaskRoutes from "./routes/TaskRoutes.js";
-import { ErrorController } from "./middlewaares/ErrorController.js";
-import AuthRoutes from './routes/authRoutes.js';
-import PermissionRoutes from './routes/permissionRoute.js';
-import { AuthMiddleware } from "./middlewaares/AuthMiddleware.js";
+import cors from "cors";
+import path from "path";
 import { fileURLToPath } from "url";
+
+import TaskRoutes from "./routes/TaskRoutes.js";
+import AuthRoutes from "./routes/authRoutes.js";
+import PermissionRoutes from "./routes/permissionRoute.js";
+import HistoriqueModifTacheRoute from "./routes/HistoriqueModifTacheRoute.js";
+import UserRoutes from "./routes/UserRoutes.js";
+import { AuthMiddleware } from "./middlewaares/AuthMiddleware.js";
+import audioRoutes from "./routes/audiosRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const uploadPath = path.join(process.cwd(), "uploads");
 
-const OMapp = express();
+const AMapp = express();
 
-OMapp.use(express.json());
+AMapp.use(express.json({ type: 'application/json', limit: '10mb' }));
 
-OMapp.use(cors({
-  origin: 'http://localhost:5173',  
-  methods: ['GET','POST','PATCH','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,              
-}));
+AMapp.use(
+  cors({
+    origin: "http://localhost:5174",
+    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
-OMapp.get('/', (req: Request, res: Response) => {
-  res.send('API BA TAKNA ZEULÉEEEE....');
+AMapp.get("/", (req: Request, res: Response) => {
+  res.send("API BA TAKNA ZEULÉEEEE....");
 });
-OMapp.use("/api/auth", AuthRoutes);
 
-OMapp.use(AuthMiddleware.authenticateUser);
+AMapp.use("/api/auth", AuthRoutes);
+AMapp.use("/uploads", express.static(path.join(process.cwd(), "/uploads/images")));
 
-OMapp.use('/uploads', express.static(uploadPath));
-OMapp.use('/api/tasks', TaskRoutes);
-OMapp.use('/api/grantpermission', PermissionRoutes);
+AMapp.use(AuthMiddleware.authenticateUser);
 
-OMapp.use(ErrorController.handle);
+AMapp.use("/api/users", UserRoutes);
+AMapp.use("/uploads/audios", express.static(path.join(process.cwd(), "/uploads/audios")));
+AMapp.use("/api/audios", audioRoutes);
+AMapp.use("/api/tasks", TaskRoutes);
+AMapp.use("/api/grantpermission", PermissionRoutes);
+AMapp.use("/api/historique", HistoriqueModifTacheRoute);
 
-export default OMapp;
+export default AMapp;

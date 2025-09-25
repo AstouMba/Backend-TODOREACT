@@ -12,6 +12,15 @@ import { ErrorsMessagesFr } from '../enum/ErrorsMessagesFr.js';
 export class PermissionUserTacheController
 
 {
+    static async getAllGlobal(req: Request, res: Response, next: NextFunction) {
+  try {
+    const permissions = await PermissionUserTacheService.findAll(); 
+    return ReponseFormatter.success(res, permissions, SuccessCodes.PERMISSION_GRANTED);
+  } catch (err) {
+    next(err);
+  }
+}
+
     static async getAll(req: Request, res: Response, next: NextFunction) {
   try {
     const tacheId = Number(req.params.id);
@@ -22,22 +31,59 @@ export class PermissionUserTacheController
   }
 }
 
-    static async create(req: Request, res: Response, next: NextFunction){
-        try {
-            const id = Number (req.params.id)
-            const tache = await TaskService.findById(id);
-            const data = PermissionSchema.parse(req.body)
-            const user = await UserService.selectUserById(data.userId)
-            if(user.id === tache.userId) throw { status: HttpStatusCode.BAD_REQUEST, message: ErrorsMessagesFr.NOT_ON_Your_OWN_TASK };
-            const permission = await PermissionUserTacheService.findById(id, data.userId, data.permission.toUpperCase() as Permission)
-            if(permission) throw { status: HttpStatusCode.BAD_REQUEST, message: ErrorsMessagesFr.ALREADY_GIVEN };
-            const OMPermission = {permission:(data.permission).toUpperCase() as Permission, userId: data.userId, tacheId: id }
-            const newPermission = await PermissionUserTacheService.create(OMPermission)
-            return ReponseFormatter.success(res, newPermission, SuccessCodes.PERMISSION_GRANTED)
-        } catch (err) {
-            next(err)
-        }
+    static async create(req: Request, res: Response, next: NextFunction) {
+  try {
+    const tacheId = Number(req.params.id);
+    const tache = await TaskService.findById(tacheId);
+
+    // Parse le body : { userId: number, permission: 'GET' | 'PATCH' | 'DELETE' }
+    const { userId, permission } = PermissionSchema.parse(req.body);
+
+    if (!userId) {
+      throw { status: HttpStatusCode.BAD_REQUEST, message: "Aucun utilisateur sélectionné" };
     }
+
+    const user = await UserService.selectUserById(userId);
+
+    if (user.id === tache.userId) {
+      // Ignorer l'utilisateur propriétaire de la tâche
+      return ReponseFormatter.success(
+        res,
+        [],
+        SuccessCodes.PERMISSION_GRANTED
+      );
+    }
+
+    const existingPermission = await PermissionUserTacheService.findById(
+      tacheId,
+      userId,
+      permission.toUpperCase() as Permission
+    );
+
+    if (existingPermission) {
+      // Ignorer les permissions déjà accordées
+      return ReponseFormatter.success(
+        res,
+        [],
+        SuccessCodes.PERMISSION_GRANTED
+      );
+    }
+
+    const newPermission = await PermissionUserTacheService.create({
+      permission: permission.toUpperCase() as Permission,
+      userId,
+      tacheId,
+    });
+
+    return ReponseFormatter.success(
+      res,
+      [newPermission],
+      SuccessCodes.PERMISSION_GRANTED
+    );
+  } catch (err) {
+    next(err);
+  }
+}
 
     static async delete(req: Request, res: Response, next: NextFunction){
         try {

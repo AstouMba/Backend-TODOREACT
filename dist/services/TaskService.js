@@ -7,21 +7,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import OMprisma from "../config/prisma.js";
+import AMprisma from "../config/prisma.js";
 import { HttpStatusCode } from "../enum/StatusCode.js";
 import { ErrorsMessagesFr } from "../enum/ErrorsMessagesFr.js";
 export class TaskService {
     static findAll(offset, limit, search, sortBy, order) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield OMprisma.taches.findMany({
+            return yield AMprisma.taches.findMany({
                 skip: offset,
                 take: limit,
-                where: {
+                where: search ? {
                     OR: [
-                        { description: { contains: search } },
-                        // {createAt: {equals: search}}
+                        { titre: { contains: search } },
+                        { description: { contains: search } }
                     ]
-                },
+                } : {},
                 orderBy: {
                     [sortBy]: order
                 }
@@ -30,24 +30,37 @@ export class TaskService {
     }
     static count() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield OMprisma.taches.count();
+            return yield AMprisma.taches.count();
+        });
+    }
+    static countFiltered(search) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield AMprisma.taches.count({
+                where: search ? {
+                    OR: [
+                        { titre: { contains: search } },
+                        { description: { contains: search } }
+                    ]
+                } : {}
+            });
         });
     }
     static findById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const OMtask = yield OMprisma.taches.findUnique({ where: { id } });
-            if (!OMtask)
+            const AMtask = yield AMprisma.taches.findUnique({ where: { id } });
+            if (!AMtask)
                 throw { status: HttpStatusCode.NOT_FOUND, message: ErrorsMessagesFr.TACHE_INTROUVABLE };
-            return OMtask;
+            return AMtask;
         });
     }
     static create(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield OMprisma.taches.create({
+            return yield AMprisma.taches.create({
                 data: {
                     titre: data.titre,
                     description: data.description,
                     image: data.image,
+                    audio: data.audio,
                     user: { connect: { id: data.userId } }
                 }
             });
@@ -55,12 +68,12 @@ export class TaskService {
     }
     static update(id, data, userId, req) {
         return __awaiter(this, void 0, void 0, function* () {
-            const OMtask = yield OMprisma.taches.findUnique({ where: { id } });
-            if (!OMtask)
+            const AMtask = yield AMprisma.taches.findUnique({ where: { id } });
+            if (!AMtask)
                 throw { status: HttpStatusCode.NOT_FOUND, message: ErrorsMessagesFr.TACHE_INTROUVABLE };
-            const [taches, log] = yield OMprisma.$transaction([
-                OMprisma.taches.update({ where: { id }, data }),
-                OMprisma.historiqueModifTache.create({ data: {
+            const [taches, log] = yield AMprisma.$transaction([
+                AMprisma.taches.update({ where: { id }, data }),
+                AMprisma.historiqueModifTache.create({ data: {
                         action: (req.method).toUpperCase(),
                         user: { connect: { id: userId } },
                         taches: { connect: { id } }
@@ -71,10 +84,14 @@ export class TaskService {
     }
     static delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const OMtask = yield OMprisma.taches.findUnique({ where: { id } });
-            if (!OMtask)
-                throw { status: HttpStatusCode.NOT_FOUND, message: ErrorsMessagesFr.TACHE_INTROUVABLE };
-            yield OMprisma.taches.delete({ where: { id } });
+            const task = yield AMprisma.taches.findUnique({ where: { id } });
+            if (!task)
+                throw { status: 404, message: "Tâche introuvable" };
+            yield AMprisma.$transaction([
+                AMprisma.permissionUserTache.deleteMany({ where: { tacheId: id } }),
+                AMprisma.historiqueModifTache.deleteMany({ where: { tacheId: id } }),
+                AMprisma.taches.delete({ where: { id } }),
+            ]);
         });
     }
 }

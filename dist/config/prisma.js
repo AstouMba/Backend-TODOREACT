@@ -1,4 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-const OMprisma = new PrismaClient();
-export default OMprisma;
+const AMprisma = new PrismaClient();
+export default AMprisma;
 //# sourceMappingURL=prisma.js.map

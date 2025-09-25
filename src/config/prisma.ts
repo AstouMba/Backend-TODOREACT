@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 
-const OMprisma = new PrismaClient();
+const AMprisma = new PrismaClient();
 
-export default OMprisma;
+export default AMprisma;

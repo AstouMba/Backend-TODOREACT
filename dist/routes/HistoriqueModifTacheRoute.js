@@ -1,8 +1,7 @@
 import { Router } from "express";
-import { PermissionUserTacheController } from "../controllers/PermissionUserTacheController.js";
 import { HistoriqueModifTacheController } from "../controllers/HistoriqueModifTacheController.js";
-const OMrouter = Router();
-OMrouter.get("/:id/historique", HistoriqueModifTacheController.getAllModif);
-OMrouter.delete("/:userId/:tacheId/:permission", PermissionUserTacheController.delete);
-export default OMrouter;
+const AMrouter = Router();
+AMrouter.get("/", HistoriqueModifTacheController.getAll);
+AMrouter.get("/:id/historique", HistoriqueModifTacheController.getAllModif);
+export default AMrouter;
 //# sourceMappingURL=HistoriqueModifTacheRoute.js.map

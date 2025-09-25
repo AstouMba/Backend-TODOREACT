@@ -1,22 +1,21 @@
 import express, { Router } from "express";
 import { TaskController } from "../controllers/TaskController.js";
 import { AuthMiddleware } from "../middlewaares/AuthMiddleware.js";
-import { HistoriqueModifTacheController } from "../controllers/HistoriqueModifTacheController.js";
+import { imageUpload } from "../middlewaares/imageUpload.js";
+import { audioUpload } from "../middlewaares/audioUpload.js";
+import { multiUpload } from "../middlewaares/multiUpload.js";
 
-const OMrouter = Router();
+const AMrouter = Router();
 
-// Routes lecture
-OMrouter.get("/", TaskController.getAll);
-OMrouter.get("/:id", TaskController.getOne);
-OMrouter.get("/:id/historique", HistoriqueModifTacheController.getAllModif);
+AMrouter.get("/", TaskController.getAll);
+AMrouter.get("/:id", TaskController.getOne);
 
-// Création – on reçoit seulement JSON avec l'URL de l'image
-OMrouter.post("/", AuthMiddleware.authenticateUser, TaskController.create);
+AMrouter.post("/", AuthMiddleware.authenticateUser, multiUpload, TaskController.create);
 
-// Modification / suppression
-OMrouter.patch("/:id", AuthMiddleware.authorizeModification, TaskController.update);
-OMrouter.patch("/:id/markDone", AuthMiddleware.authorizeModification, TaskController.updateStatusDone);
-OMrouter.patch("/:id/markUndone", AuthMiddleware.authorizeModification, TaskController.updateStatusUndone);
-OMrouter.delete("/:id", AuthMiddleware.authorizeModification, TaskController.delete);
+AMrouter.patch("/:id", AuthMiddleware.authenticateUser, multiUpload, TaskController.update);
 
-export default OMrouter;
+AMrouter.patch("/:id/markDone", AuthMiddleware.authenticateUser, TaskController.updateStatusDone);
+AMrouter.patch("/:id/markUndone", AuthMiddleware.authenticateUser, TaskController.updateStatusUndone);
+AMrouter.delete("/:id", AuthMiddleware.authenticateUser, TaskController.delete);
+
+export default AMrouter;
