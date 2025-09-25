@@ -12,9 +12,9 @@ import audioRoutes from "./routes/audiosRoutes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const AMapp = express();
-AMapp.use(express.json());
+AMapp.use(express.json({ type: 'application/json', limit: '10mb' }));
 AMapp.use(cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5174",
     methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -23,7 +23,7 @@ AMapp.get("/", (req, res) => {
     res.send("API BA TAKNA ZEULÉEEEE....");
 });
 AMapp.use("/api/auth", AuthRoutes);
-AMapp.use("/uploads", express.static(path.join(process.cwd(), "/uploads")));
+AMapp.use("/uploads", express.static(path.join(process.cwd(), "/uploads/images")));
 AMapp.use(AuthMiddleware.authenticateUser);
 AMapp.use("/api/users", UserRoutes);
 AMapp.use("/uploads/audios", express.static(path.join(process.cwd(), "/uploads/audios")));

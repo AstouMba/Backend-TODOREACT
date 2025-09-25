@@ -16,12 +16,12 @@ export class TaskService {
             return yield AMprisma.taches.findMany({
                 skip: offset,
                 take: limit,
-                where: {
+                where: search ? {
                     OR: [
-                        { description: { contains: search } },
-                        // {createAt: {equals: search}}
+                        { titre: { contains: search } },
+                        { description: { contains: search } }
                     ]
-                },
+                } : {},
                 orderBy: {
                     [sortBy]: order
                 }
@@ -31,6 +31,18 @@ export class TaskService {
     static count() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield AMprisma.taches.count();
+        });
+    }
+    static countFiltered(search) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield AMprisma.taches.count({
+                where: search ? {
+                    OR: [
+                        { titre: { contains: search } },
+                        { description: { contains: search } }
+                    ]
+                } : {}
+            });
         });
     }
     static findById(id) {

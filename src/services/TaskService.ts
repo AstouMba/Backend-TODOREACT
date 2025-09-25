@@ -12,12 +12,12 @@ export class TaskService
         return await AMprisma.taches.findMany({
             skip: offset,
             take: limit,
-            where: {
-                OR:[
-                {description: {contains: search}},
-                // {createAt: {equals: search}}
+            where: search ? {
+                OR: [
+                    { titre: { contains: search } },
+                    { description: { contains: search } }
                 ]
-            },
+            } : {},
             orderBy: {
                 [sortBy]: order
             }
@@ -25,7 +25,18 @@ export class TaskService
     }
 
     static async count(): Promise<number> {
-    return await AMprisma.taches.count();
+        return await AMprisma.taches.count();
+    }
+
+    static async countFiltered(search: string): Promise<number> {
+        return await AMprisma.taches.count({
+            where: search ? {
+                OR: [
+                    { titre: { contains: search } },
+                    { description: { contains: search } }
+                ]
+            } : {}
+        });
     }
 
     static async findById(id: number): Promise<Taches> {

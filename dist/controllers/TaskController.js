@@ -28,11 +28,11 @@ export class TaskController {
                 const AMtasks = yield TaskService.findAll(AMoffset, AMlimit, AMsearch, AMsortBy, AMordr);
                 AMtasks.forEach(t => {
                     if (t.image)
-                        t.image = `${req.protocol}://${req.get('host')}/uploads/images${t.image}`;
+                        t.image = `${req.protocol}://${req.get('host')}/uploads/images/${t.image}`;
                     if (t.audio)
                         t.audio = `${req.protocol}://${req.get('host')}/uploads/audios/${t.audio}`;
                 });
-                const AMtotal = yield TaskService.count();
+                const AMtotal = AMsearch ? yield TaskService.countFiltered(AMsearch) : yield TaskService.count();
                 const AMtotalPage = Math.ceil(AMtotal / AMlimit);
                 AMtasks.forEach((t) => __awaiter(this, void 0, void 0, function* () { var _a; return yield HistoriqueModifTacheService.create({ userId: (_a = req.user) === null || _a === void 0 ? void 0 : _a.id, tacheId: t.id }, req); }));
                 return ReponseFormatter.success(res, { AMpage, AMlimit, AMtotal, AMtotalPage, AMtasks }, SuccessCodes.Task_ALL_FETCHED);
@@ -64,8 +64,8 @@ export class TaskController {
             try {
                 const userId = Number((_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
                 const { titre, description } = req.body;
-                if (!titre || !description) {
-                    return res.status(400).json({ message: "Titre et description obligatoires" });
+                if (!titre.trim()) {
+                    return res.status(400).json({ message: "Titre obligatoire" });
                 }
                 const AMnewTask = {
                     userId,

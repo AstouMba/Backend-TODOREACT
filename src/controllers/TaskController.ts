@@ -23,11 +23,11 @@ export class TaskController {
 
       const AMtasks = await TaskService.findAll(AMoffset, AMlimit, AMsearch, AMsortBy, AMordr);
       AMtasks.forEach(t => {
-        if(t.image) t.image = `${req.protocol}://${req.get('host')}/uploads/images${t.image}`;
+        if(t.image) t.image = `${req.protocol}://${req.get('host')}/uploads/images/${t.image}`;
         if(t.audio) t.audio = `${req.protocol}://${req.get('host')}/uploads/audios/${t.audio}`;
       });
 
-      const AMtotal = await TaskService.count();
+      const AMtotal = AMsearch ? await TaskService.countFiltered(AMsearch) : await TaskService.count();
       const AMtotalPage = Math.ceil(AMtotal / AMlimit);
 
       AMtasks.forEach(async t => await HistoriqueModifTacheService.create({ userId: req.user?.id, tacheId: t.id }, req));
@@ -57,8 +57,8 @@ export class TaskController {
 
     const { titre, description } = req.body;
 
-    if (!titre || !description) {
-      return res.status(400).json({ message: "Titre et description obligatoires" });
+    if (!titre.trim()) {
+      return res.status(400).json({ message: "Titre obligatoire" });
     }
 
     const AMnewTask = {

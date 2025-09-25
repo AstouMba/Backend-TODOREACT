@@ -16,6 +16,12 @@ const storage = multer.diskStorage({
         fs.mkdirSync(audioDir, { recursive: true });
       }
       cb(null, audioDir);
+    } else if (file.fieldname === "image") {
+      const imageDir = path.join(uploadDir, "images");
+      if (!fs.existsSync(imageDir)) {
+        fs.mkdirSync(imageDir, { recursive: true });
+      }
+      cb(null, imageDir);
     } else {
       cb(null, uploadDir);
     }
@@ -26,7 +32,13 @@ const storage = multer.diskStorage({
   },
 });
 
-export const multiUpload = multer({ storage }).fields([
+export const multiUpload = multer({
+  storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB limit per file
+    files: 2, // max 2 files
+  },
+}).fields([
   { name: "image", maxCount: 1 },
   { name: "audio", maxCount: 1 },
 ]);

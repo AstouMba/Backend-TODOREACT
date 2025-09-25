@@ -16,10 +16,15 @@ import { AMSecret_Key } from "../config/env.js";
 // export const SECRET_KEY = "ma_clef_secrete";
 export class AuthMiddleware {
     static authenticateUser(req, res, next) {
+        // Permettre les requêtes OPTIONS pour CORS preflight
+        if (req.method === 'OPTIONS') {
+            return next();
+        }
         const authHeader = req.headers["authorization"];
         const token = authHeader && authHeader.split(" ")[1];
-        if (!token)
+        if (!token) {
             return res.status(401).json({ error: "Token manquant" });
+        }
         try {
             const decoded = JWTService.decryptToken(token, AMSecret_Key);
             if (typeof decoded === "object" && decoded !== null && "login" in decoded) {
@@ -37,6 +42,10 @@ export class AuthMiddleware {
     static authorizeModification(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
+            // Permettre les requêtes OPTIONS
+            if (req.method === 'OPTIONS') {
+                return next();
+            }
             try {
                 const id = Number(req.params.id);
                 const AMtask = yield TaskService.findById(id);
@@ -53,13 +62,21 @@ export class AuthMiddleware {
     static authorizePermission(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
+            // Permettre les requêtes OPTIONS
+            if (req.method === 'OPTIONS') {
+                return next();
+            }
             try {
                 const id = Number(req.params.id);
                 const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
                 const method = req.method;
                 const AMPermission = yield PermissionUserTacheService.findById(id, userId, method);
-                if (!AMPermission)
-                    throw { status: HttpStatusCode.FORBIDDEN, message: ErrorsMessagesFr.FORBIDDEN_ACTION };
+                if (!AMPermission) {
+                    throw {
+                        status: HttpStatusCode.FORBIDDEN,
+                        message: ErrorsMessagesFr.FORBIDDEN_ACTION
+                    };
+                }
                 next();
             }
             catch (err) {
