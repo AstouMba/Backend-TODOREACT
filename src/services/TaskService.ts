@@ -1,4 +1,4 @@
-import OMprisma from "../config/prisma.js";
+import AMprisma from "../config/prisma.js";
 import type {Taches, HistoriqueModifTache} from "../../node_modules/.prisma/client/index.js"
 import type { IService } from "../Interface/IServices.js";
 import { HttpStatusCode } from "../enum/StatusCode.js";
@@ -9,7 +9,7 @@ import { Request } from "express";
 export class TaskService
 {
     static async findAll(offset: number, limit: number, search: string, sortBy: string, order: string): Promise<Taches[]> {
-        return await OMprisma.taches.findMany({
+        return await AMprisma.taches.findMany({
             skip: offset,
             take: limit,
             where: {
@@ -25,31 +25,32 @@ export class TaskService
     }
 
     static async count(): Promise<number> {
-    return await OMprisma.taches.count();
+    return await AMprisma.taches.count();
     }
 
     static async findById(id: number): Promise<Taches> {
-        const OMtask = await OMprisma.taches.findUnique({ where: { id } });
-        if (!OMtask) throw {status: HttpStatusCode.NOT_FOUND, message: ErrorsMessagesFr.TACHE_INTROUVABLE}
-        return OMtask;
+        const AMtask = await AMprisma.taches.findUnique({ where: { id } });
+        if (!AMtask) throw {status: HttpStatusCode.NOT_FOUND, message: ErrorsMessagesFr.TACHE_INTROUVABLE}
+        return AMtask;
     }
 static async create(data: Omit<Taches, "id" | "createAt" | "modifiedAt" | "etat">): Promise<Taches> {
-    return await OMprisma.taches.create({
+    return await AMprisma.taches.create({
         data: {
             titre: data.titre, 
             description: data.description,
             image: data.image,
+            audio: data.audio,
             user: { connect: { id: data.userId } }
         }
     })
 }
 
     static async update(id: number, data: Partial<Taches>, userId: number, req: Request): Promise<[Taches, HistoriqueModifTache]> {
-        const OMtask = await OMprisma.taches.findUnique({ where: { id } });
-        if (!OMtask) throw {status: HttpStatusCode.NOT_FOUND, message: ErrorsMessagesFr.TACHE_INTROUVABLE};
-        const [taches, log] = await OMprisma.$transaction([
-            OMprisma.taches.update({where: {id}, data}),
-            OMprisma.historiqueModifTache.create({data:{
+        const AMtask = await AMprisma.taches.findUnique({ where: { id } });
+        if (!AMtask) throw {status: HttpStatusCode.NOT_FOUND, message: ErrorsMessagesFr.TACHE_INTROUVABLE};
+        const [taches, log] = await AMprisma.$transaction([
+            AMprisma.taches.update({where: {id}, data}),
+            AMprisma.historiqueModifTache.create({data:{
             action: (req.method).toUpperCase() as Permission,
             user: { connect: { id: userId } } ,
             taches: { connect: { id } } 
@@ -58,11 +59,19 @@ static async create(data: Omit<Taches, "id" | "createAt" | "modifiedAt" | "etat"
         ])
         return [taches, log]
     }
-    static async delete(id: number): Promise<void> {
-        const OMtask = await OMprisma.taches.findUnique({ where: { id } });
-        if (!OMtask) throw {status: HttpStatusCode.NOT_FOUND, message: ErrorsMessagesFr.TACHE_INTROUVABLE};
-        await OMprisma.taches.delete({where: {id}})
-    }
+  static async delete(id: number): Promise<void> {
+  const task = await AMprisma.taches.findUnique({ where: { id } });
+  if (!task) throw { status: 404, message: "Tâche introuvable" };
+
+  await AMprisma.$transaction([
+
+    AMprisma.permissionUserTache.deleteMany({ where: { tacheId: id } }),
+
+    AMprisma.historiqueModifTache.deleteMany({ where: { tacheId: id } }),
+
+    AMprisma.taches.delete({ where: { id } }),
+  ]);
+}
 }
 
 const TypedUserService: IService<Taches, HistoriqueModifTache> = TaskService;

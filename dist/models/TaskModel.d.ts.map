@@ -1,1 +1,1 @@
-{"version":3,"file":"TaskModel.d.ts","sourceRoot":"","sources":["../../src/models/TaskModel.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AAExB,eAAO,MAAM,YAAY;;;;iBAIvB,CAAC;AAEH,MAAM,MAAM,SAAS,GAAG,CAAC,CAAC,KAAK,CAAC,OAAO,YAAY,CAAC,CAAC"}
+{"version":3,"file":"TaskModel.d.ts","sourceRoot":"","sources":["../../src/models/TaskModel.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AAExB,eAAO,MAAM,YAAY;;;;;iBAKvB,CAAC;AAEH,MAAM,MAAM,SAAS,GAAG,CAAC,CAAC,KAAK,CAAC,OAAO,YAAY,CAAC,CAAC"}

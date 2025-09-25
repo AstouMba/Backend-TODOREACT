@@ -9,7 +9,7 @@ export class HistoriqueModifTacheController
 {
     static async getAll(req: Request, res: Response, next: NextFunction) {
   try {
-    const allModification = await HistoriqueModifTacheService.findAll(); // <--- service global
+    const allModification = await HistoriqueModifTacheService.findAll(); 
     let data: {author: string, dateCreation: string, dateModif: string, action: string}[] = [];
 
     allModification.forEach(modification => {
@@ -22,7 +22,7 @@ export class HistoriqueModifTacheController
           : modification.action === "GET"
           ? "Lecture"
           : "Suppression"
-      };
+      };  
       data.push(modif);
     });
 

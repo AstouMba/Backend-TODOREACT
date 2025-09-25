@@ -3,9 +3,9 @@ import { PermissionUserTacheController } from "../controllers/PermissionUserTach
 import { AuthMiddleware } from "../middlewaares/AuthMiddleware.js";
 import { HistoriqueModifTacheController } from "../controllers/HistoriqueModifTacheController.js";
 
-const OMrouter = Router();
+const AMrouter = Router();
 
-OMrouter.get("/", HistoriqueModifTacheController.getAll);
-OMrouter.get("/:id/historique",  HistoriqueModifTacheController.getAllModif);
+AMrouter.get("/", HistoriqueModifTacheController.getAll);
+AMrouter.get("/:id/historique",  HistoriqueModifTacheController.getAllModif);
 
-export default OMrouter
+export default AMrouter

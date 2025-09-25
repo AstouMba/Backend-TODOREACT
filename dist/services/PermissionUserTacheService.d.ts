@@ -29,6 +29,7 @@ export declare class PermissionUserTacheService {
         tacheId: number;
         permission: import("@prisma/client").$Enums.Permission;
     })[]>;
+    static hasPermission(tacheId: number, userId: number, permission: Permission): Promise<boolean>;
     static findById(tacheId: number, userId: number, permission: Permission): Promise<PermissionUserTache | null>;
     static create(data: Omit<PermissionUserTache, "id">): Promise<PermissionUserTache>;
     static delete(data: Omit<PermissionUserTache, "id">): Promise<{

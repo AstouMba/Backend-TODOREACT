@@ -9,7 +9,7 @@
     "build": "tsc -w",
     "prisma:migrate": "npx prisma migrate dev --name init",
     "prisma:seed": "npx ts-node dist/seeders/seeds.js",
-    "start": "node dist/index.js"
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",

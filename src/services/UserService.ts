@@ -1,4 +1,4 @@
-import OMprisma from "../config/prisma.js";
+import AMprisma from "../config/prisma.js";
 import bcrypt from "bcryptjs";
 import { ErrorsMessagesFr } from "../enum/ErrorsMessagesFr.js";
 import { HttpStatusCode } from "../enum/StatusCode.js";
@@ -7,17 +7,17 @@ import { User } from "@prisma/client";
 export class UserService 
 {
   static async getAllUsers() {
-    return OMprisma.user.findMany(); 
+    return AMprisma.user.findMany(); 
   }
   static async selectUserByLogin(login: string): Promise<User> {
-    const user =  await OMprisma.user.findUnique({
+    const user =  await AMprisma.user.findUnique({
         where: {login}
     });
     if (!user) throw { status: HttpStatusCode.BAD_REQUEST, message: ErrorsMessagesFr.INCORRECT_CREDENTIALS };
     return user;
   }
     static async selectUserById(id: number): Promise<User> {
-    const user =  await OMprisma.user.findUnique({
+    const user =  await AMprisma.user.findUnique({
         where: {id}
     });
     if (!user) throw { status: HttpStatusCode.BAD_REQUEST, message: ErrorsMessagesFr.USER_NOT_FOUND };
@@ -25,12 +25,12 @@ export class UserService
   }    // { id: "permissions", label: "Permissions", icon: Shield },
 
     static async userExists(login: string): Promise<boolean> {
-    const user = await OMprisma.user.findUnique({ where: { login } });
+    const user = await AMprisma.user.findUnique({ where: { login } });
     return !!user;
   }
 
  static async createUser(data: { login: string; password: string; nom: string }): Promise<User> {
-  return OMprisma.user.create({
+  return AMprisma.user.create({
     data: {
       login: data.login,
       password: data.password,

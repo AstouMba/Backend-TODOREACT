@@ -12,7 +12,7 @@ import { TaskService } from "../services/TaskService.js";
 import { HttpStatusCode } from "../enum/StatusCode.js";
 import { ErrorsMessagesFr } from "../enum/ErrorsMessagesFr.js";
 import { PermissionUserTacheService } from "../services/PermissionUserTacheService.js";
-import { OMSecret_Key } from "../config/env.js";
+import { AMSecret_Key } from "../config/env.js";
 // export const SECRET_KEY = "ma_clef_secrete";
 export class AuthMiddleware {
     static authenticateUser(req, res, next) {
@@ -21,7 +21,7 @@ export class AuthMiddleware {
         if (!token)
             return res.status(401).json({ error: "Token manquant" });
         try {
-            const decoded = JWTService.decryptToken(token, OMSecret_Key);
+            const decoded = JWTService.decryptToken(token, AMSecret_Key);
             if (typeof decoded === "object" && decoded !== null && "login" in decoded) {
                 req.user = decoded;
             }
@@ -39,8 +39,8 @@ export class AuthMiddleware {
             var _a;
             try {
                 const id = Number(req.params.id);
-                const OMtask = yield TaskService.findById(id);
-                if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.id) === OMtask.userId) {
+                const AMtask = yield TaskService.findById(id);
+                if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.id) === AMtask.userId) {
                     return next();
                 }
                 return AuthMiddleware.authorizePermission(req, res, next);
@@ -57,8 +57,8 @@ export class AuthMiddleware {
                 const id = Number(req.params.id);
                 const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
                 const method = req.method;
-                const OMPermission = yield PermissionUserTacheService.findById(id, userId, method);
-                if (!OMPermission)
+                const AMPermission = yield PermissionUserTacheService.findById(id, userId, method);
+                if (!AMPermission)
                     throw { status: HttpStatusCode.FORBIDDEN, message: ErrorsMessagesFr.FORBIDDEN_ACTION };
                 next();
             }

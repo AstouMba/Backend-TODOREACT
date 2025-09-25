@@ -7,18 +7,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import OMprisma from "../config/prisma.js";
+import AMprisma from "../config/prisma.js";
 import { ErrorsMessagesFr } from "../enum/ErrorsMessagesFr.js";
 import { HttpStatusCode } from "../enum/StatusCode.js";
 export class UserService {
     static getAllUsers() {
         return __awaiter(this, void 0, void 0, function* () {
-            return OMprisma.user.findMany();
+            return AMprisma.user.findMany();
         });
     }
     static selectUserByLogin(login) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield OMprisma.user.findUnique({
+            const user = yield AMprisma.user.findUnique({
                 where: { login }
             });
             if (!user)
@@ -28,7 +28,7 @@ export class UserService {
     }
     static selectUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield OMprisma.user.findUnique({
+            const user = yield AMprisma.user.findUnique({
                 where: { id }
             });
             if (!user)
@@ -38,13 +38,13 @@ export class UserService {
     } // { id: "permissions", label: "Permissions", icon: Shield },
     static userExists(login) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield OMprisma.user.findUnique({ where: { login } });
+            const user = yield AMprisma.user.findUnique({ where: { login } });
             return !!user;
         });
     }
     static createUser(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            return OMprisma.user.create({
+            return AMprisma.user.create({
                 data: {
                     login: data.login,
                     password: data.password,

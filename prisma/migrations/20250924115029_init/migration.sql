@@ -6,6 +6,7 @@ CREATE TABLE `Taches` (
     `createAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `etat` ENUM('Termine', 'En_Cours') NOT NULL DEFAULT 'En_Cours',
     `image` VARCHAR(191) NULL,
+    `audio` VARCHAR(191) NULL,
     `userId` INTEGER NOT NULL,
 
     INDEX `Taches_userId_fkey`(`userId`),

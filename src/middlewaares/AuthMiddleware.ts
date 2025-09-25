@@ -5,7 +5,7 @@ import { HttpStatusCode } from "../enum/StatusCode.js";
 import { ErrorsMessagesFr } from "../enum/ErrorsMessagesFr.js";
 import { PermissionUserTacheService } from "../services/PermissionUserTacheService.js";
 import { Permission } from "@prisma/client";
-import { OMSecret_Key } from "../config/env.js";
+import { AMSecret_Key } from "../config/env.js";
 
 // export const SECRET_KEY = "ma_clef_secrete";
 
@@ -16,7 +16,7 @@ export class AuthMiddleware
         const token = authHeader && authHeader.split(" ")[1];
         if (!token) return res.status(401).json({ error: "Token manquant" });
         try {
-            const decoded = JWTService.decryptToken(token,OMSecret_Key )
+            const decoded = JWTService.decryptToken(token,AMSecret_Key )
             if (typeof decoded === "object" && decoded !== null && "login" in decoded) {
                 req.user = decoded as { login: string; id: string };
             }else {
@@ -31,8 +31,8 @@ export class AuthMiddleware
     static async authorizeModification(req: Request, res: Response, next: NextFunction) {
             try {
                 const id = Number(req.params.id);
-                const OMtask = await TaskService.findById(id);
-                if (req.user?.id === OMtask.userId) {
+                const AMtask = await TaskService.findById(id);
+                if (req.user?.id === AMtask.userId) {
                     return next()
                 }
                 return AuthMiddleware.authorizePermission(req, res, next);
@@ -47,8 +47,8 @@ export class AuthMiddleware
             const userId = req.user?.id;
             const method = req.method as Permission;
 
-            const OMPermission = await PermissionUserTacheService.findById(id, userId, method)
-            if(!OMPermission) throw {status: HttpStatusCode.FORBIDDEN, message: ErrorsMessagesFr.FORBIDDEN_ACTION};
+            const AMPermission = await PermissionUserTacheService.findById(id, userId, method)
+            if(!AMPermission) throw {status: HttpStatusCode.FORBIDDEN, message: ErrorsMessagesFr.FORBIDDEN_ACTION};
             next()
         } catch (err) {
             next(err)

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { TaskService } from './TaskService.js';
-import { OMSecret_Key } from '../config/env.js';
+import { AMSecret_Key } from '../config/env.js';
 import { Response } from 'express';
 import { UserService } from './UserService.js';
 import { log } from 'console';
@@ -13,10 +13,10 @@ export class JWTService
         return jwt.sign(data, secretKey, option);
     }
 
-    static decryptToken(token: string, OMSecret_Key: string,){
-        console.log(OMSecret_Key);
+    static decryptToken(token: string, AMSecret_Key: string,){
+        console.log(AMSecret_Key);
         
-        return jwt.verify(token, OMSecret_Key);
+        return jwt.verify(token, AMSecret_Key);
     }
 
     static async refreshToken(token: string, secretKey: string){
@@ -25,7 +25,7 @@ export class JWTService
             const payload = decoded as { login: string };
             const user = await UserService.selectUserByLogin(payload.login);
             if(!user) return null;
-            return  this.cryptData({login: user.login, id: user.id}, OMSecret_Key, 1);
+            return  this.cryptData({login: user.login, id: user.id}, AMSecret_Key, 1);
         }
         return null;
     }

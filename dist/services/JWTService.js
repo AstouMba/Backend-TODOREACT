@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import jwt from 'jsonwebtoken';
-import { OMSecret_Key } from '../config/env.js';
+import { AMSecret_Key } from '../config/env.js';
 import { UserService } from './UserService.js';
 export class JWTService {
     static cryptData(data, secretKey, validityTime) {
@@ -17,9 +17,9 @@ export class JWTService {
             option.expiresIn = `${validityTime}h`;
         return jwt.sign(data, secretKey, option);
     }
-    static decryptToken(token, OMSecret_Key) {
-        console.log(OMSecret_Key);
-        return jwt.verify(token, OMSecret_Key);
+    static decryptToken(token, AMSecret_Key) {
+        console.log(AMSecret_Key);
+        return jwt.verify(token, AMSecret_Key);
     }
     static refreshToken(token, secretKey) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -29,7 +29,7 @@ export class JWTService {
                 const user = yield UserService.selectUserByLogin(payload.login);
                 if (!user)
                     return null;
-                return this.cryptData({ login: user.login, id: user.id }, OMSecret_Key, 1);
+                return this.cryptData({ login: user.login, id: user.id }, AMSecret_Key, 1);
             }
             return null;
         });

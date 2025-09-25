@@ -14,7 +14,7 @@ export class HistoriqueModifTacheController {
     static getAll(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const allModification = yield HistoriqueModifTacheService.findAll(); // <--- service global
+                const allModification = yield HistoriqueModifTacheService.findAll();
                 let data = [];
                 allModification.forEach(modification => {
                     const modif = {

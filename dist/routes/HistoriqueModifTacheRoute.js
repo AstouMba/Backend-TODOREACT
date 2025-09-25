@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { HistoriqueModifTacheController } from "../controllers/HistoriqueModifTacheController.js";
-const OMrouter = Router();
-OMrouter.get("/", HistoriqueModifTacheController.getAll);
-OMrouter.get("/:id/historique", HistoriqueModifTacheController.getAllModif);
-export default OMrouter;
+const AMrouter = Router();
+AMrouter.get("/", HistoriqueModifTacheController.getAll);
+AMrouter.get("/:id/historique", HistoriqueModifTacheController.getAllModif);
+export default AMrouter;
 //# sourceMappingURL=HistoriqueModifTacheRoute.js.map
